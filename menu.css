@@ -298,25 +298,32 @@
 }
 .carousel-track{
   display:flex;
-  gap:12px;
+  gap:16px;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   scroll-behavior:smooth;
-  padding-bottom:6px;
+  padding:30px calc(50% - 90px) 36px;
   -webkit-overflow-scrolling:touch;
 }
 .carousel-track::-webkit-scrollbar{display:none;}
-.carousel-track{scrollbar-width:none;}
 .carousel-card{
   flex:0 0 auto;
-  scroll-snap-align:start;
   width:180px;
+  scroll-snap-align:center;
   border-radius:16px;
   overflow:hidden;
   background:var(--paper);
   box-shadow:0 4px 14px rgba(0,0,0,0.12);
   text-decoration:none;
   color:inherit;
+  transition:transform .35s cubic-bezier(.25,.8,.25,1), box-shadow .35s ease, z-index 0s;
+  position:relative;
+  z-index:1;
+}
+.carousel-card.active{
+  transform:scale(1.12);
+  z-index:5;
+  box-shadow:0 14px 32px rgba(0,0,0,0.28);
 }
 .carousel-card img{
   width:100%;
@@ -365,5 +372,31 @@
 }
 
 @media (min-width:640px){
-  .carousel-card{width:200px;}
+  .carousel-card{
+    width:200px;
+  }
+
+  .carousel-track{
+    padding-left:calc(50% - 100px);
+    padding-right:calc(50% - 100px);
+  }
+}
+
+.carousel-card{
+  opacity:.65;
+  transform:scale(.92);
+  filter:brightness(.88);
+  transition:
+    transform .35s cubic-bezier(.25,.8,.25,1),
+    opacity .35s ease,
+    filter .35s ease,
+    box-shadow .35s ease;
+}
+
+.carousel-card.active{
+  transform:scale(1.12);
+  opacity:1;
+  filter:brightness(1);
+  z-index:5;
+  box-shadow:0 14px 32px rgba(0,0,0,.28);
 }

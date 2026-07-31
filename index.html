@@ -57,15 +57,15 @@
   </nav>
 </aside>
 
-<!-- <section class="carousel-section" aria-label="Recomendados">
+<section class="carousel-section" aria-label="Recomendados">
   <h2>Recomendados</h2>
   <div class="carousel">
     <div class="carousel-track" id="recoTrack">
       <a class="carousel-card" href="#frappes">
-        <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop" alt="Frappe de la casa">
+        <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop" alt="Frappe de nutella">
         <div class="carousel-card-info">
-          <div class="carousel-card-name">Frappe de la casa</div>
-          <div class="carousel-card-price">14.00</div>
+          <div class="carousel-card-name">Frappe de nutella</div>
+          <div class="carousel-card-price">13.00</div>
         </div>
       </a>
       <a class="carousel-card" href="#hamburguesas">
@@ -75,17 +75,17 @@
           <div class="carousel-card-price">12.00</div>
         </div>
       </a>
-      <a class="carousel-card" href="#postres">
+      <!-- <a class="carousel-card" href="#postres">
         <img src="https://images.unsplash.com/photo-1618223570057-25f2c5f0f4de?w=400&h=300&fit=crop" alt="Cheesecake de maracuyá">
         <div class="carousel-card-info">
           <div class="carousel-card-name">Cheesecake de maracuyá</div>
           <div class="carousel-card-price">10.00</div>
         </div>
-      </a>
+      </a> -->
       <a class="carousel-card" href="#cocteles">
-        <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=300&fit=crop" alt="Mojito de fresa">
+        <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=300&fit=crop" alt="Mojito de limon">
         <div class="carousel-card-info">
-          <div class="carousel-card-name">Mojito de fresa</div>
+          <div class="carousel-card-name">Mojito de limon</div>
           <div class="carousel-card-price">12.00</div>
         </div>
       </a>
@@ -99,7 +99,7 @@
     </div>
     <div class="carousel-dots" id="recoDots"></div>
   </div>
-</section> -->
+</section>
 
 <main>
 
@@ -672,6 +672,11 @@
     });
     const dots = recoDots.querySelectorAll('span');
 
+    function setActiveCard(index){
+      cards.forEach((card, i) => card.classList.toggle('active', i === index));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
     dots.forEach((dot, i) => {
       dot.addEventListener('click', () => {
         cards[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
@@ -688,9 +693,12 @@
           const dist = Math.abs(card.offsetLeft - recoTrack.scrollLeft);
           if (dist < closestDist) { closestDist = dist; closestIndex = i; }
         });
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === closestIndex));
+        setActiveCard(closestIndex);
       }, 80);
     });
+
+    // Activar la primera tarjeta al cargar
+    setActiveCard(0);
   }
 
   hamburgerBtn.addEventListener('click', () => {
