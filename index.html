@@ -682,19 +682,34 @@
         cards[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
       });
     });
+    let ticking = false;
 
-    let scrollTimeout;
     recoTrack.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
+      if (ticking) return;
+
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const trackRect = recoTrack.getBoundingClientRect();
+        const trackCenter = trackRect.left + trackRect.width / 2;
+
         let closestIndex = 0;
         let closestDist = Infinity;
+
         cards.forEach((card, i) => {
-          const dist = Math.abs(card.offsetLeft - recoTrack.scrollLeft);
-          if (dist < closestDist) { closestDist = dist; closestIndex = i; }
+          const cardRect = card.getBoundingClientRect();
+          const cardCenter = cardRect.left + cardRect.width / 2;
+          const distance = Math.abs(trackCenter - cardCenter);
+
+          if (distance < closestDist) {
+            closestDist = distance;
+            closestIndex = i;
+          }
         });
+
         setActiveCard(closestIndex);
-      }, 80);
+        ticking = false;
+      });
     });
 
     // Activar la primera tarjeta al cargar

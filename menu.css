@@ -316,14 +316,8 @@
   box-shadow:0 4px 14px rgba(0,0,0,0.12);
   text-decoration:none;
   color:inherit;
-  transition:transform .35s cubic-bezier(.25,.8,.25,1), box-shadow .35s ease, z-index 0s;
   position:relative;
   z-index:1;
-}
-.carousel-card.active{
-  transform:scale(1.12);
-  z-index:5;
-  box-shadow:0 14px 32px rgba(0,0,0,0.28);
 }
 .carousel-card img{
   width:100%;
@@ -383,14 +377,11 @@
 }
 
 .carousel-card{
-  opacity:.65;
-  transform:scale(.92);
-  filter:brightness(.88);
   transition:
-    transform .35s cubic-bezier(.25,.8,.25,1),
-    opacity .35s ease,
-    filter .35s ease,
-    box-shadow .35s ease;
+    transform .18s ease,
+    opacity .18s ease,
+    filter .18s ease,
+    box-shadow .18s ease;
 }
 
 .carousel-card.active{
