@@ -391,3 +391,619 @@
   z-index:5;
   box-shadow:0 14px 32px rgba(0,0,0,.28);
 }
+
+/* ===== Estilo frío para Iced Coffee ===== */
+
+#iced-coffee h2{
+  position:relative;
+  width:fit-content;
+  padding:10px 18px 10px 46px;
+  overflow:hidden;
+
+  color:#075E78;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.95),
+      rgba(207,242,255,.95),
+      rgba(148,220,245,.85)
+    );
+
+  border:1px solid rgba(77,181,220,.55);
+  border-radius:14px;
+
+  box-shadow:
+    0 5px 15px rgba(39,155,199,.20),
+    inset 0 1px 0 rgba(255,255,255,.95);
+
+  text-shadow:
+    0 1px 0 #FFFFFF,
+    0 0 8px rgba(99,210,255,.55);
+}
+
+/* Reemplaza el punto naranja por un copo de nieve */
+#iced-coffee h2::before{
+  content:"❄";
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+
+  width:auto;
+  height:auto;
+  background:none;
+  border-radius:0;
+
+  color:#159CC8;
+  font-size:1.35rem;
+  line-height:1;
+
+  text-shadow:
+    0 0 6px #FFFFFF,
+    0 0 10px rgba(55,193,235,.8);
+
+  animation:girarCopo 7s linear infinite;
+}
+
+/* Brillos que simulan hielo */
+#iced-coffee h2::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255,255,255,.95) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 72% 30%,
+      rgba(255,255,255,.8) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 88% 75%,
+      rgba(255,255,255,.7) 0 1.5px,
+      transparent 3px
+    );
+}
+
+/* Línea divisoria azul tipo hielo */
+#iced-coffee .divider{
+  height:3px;
+  background:linear-gradient(
+    90deg,
+    #159CC8 0%,
+    #8EDCF4 45%,
+    rgba(206,243,255,.2) 80%,
+    transparent 100%
+  );
+  box-shadow:0 0 8px rgba(40,178,224,.35);
+}
+
+/* Movimiento suave del copo */
+@keyframes girarCopo{
+  from{
+    transform:translateY(-50%) rotate(0deg);
+  }
+  to{
+    transform:translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Evita animaciones si el usuario las tiene desactivadas */
+@media (prefers-reduced-motion:reduce){
+  #iced-coffee h2::before{
+    animation:none;
+  }
+}
+
+#cafe .divider{
+  /* ... */
+}
+
+#cafe .item-price{
+  /* ... */
+}
+
+/* ===== Estilo únicamente para la etiqueta Café ===== */
+
+#cafe h2{
+  position:relative;
+  width:fit-content;
+  padding:10px 20px 10px 50px;
+
+  color:#5A2F1D;
+
+  background:linear-gradient(
+    135deg,
+    #FFF8EA 0%,
+    #F3D6A3 55%,
+    #DCA15D 100%
+  );
+
+  border:1px solid rgba(139,82,43,.35);
+  border-radius:14px;
+
+  box-shadow:
+    0 6px 16px rgba(91,48,25,.18),
+    inset 0 1px 0 rgba(255,255,255,.9);
+
+  text-shadow:0 1px 0 rgba(255,255,255,.8);
+}
+
+/* Icono de taza */
+#cafe h2::before{
+  content:"☕";
+  position:absolute;
+  left:13px;
+  top:50%;
+
+  width:auto;
+  height:auto;
+  background:none;
+  border-radius:0;
+
+  font-size:1.45rem;
+  line-height:1;
+
+  transform:translateY(-50%);
+  filter:drop-shadow(0 3px 3px rgba(82,42,20,.25));
+
+  animation:cafeFlotar 2.8s ease-in-out infinite;
+}
+
+/* Animación suave de la taza */
+@keyframes cafeFlotar{
+  0%, 100%{
+    transform:translateY(-50%);
+  }
+
+  50%{
+    transform:translateY(-58%);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #cafe h2::before{
+    animation:none;
+  }
+}
+
+/* ===== Estilo solo para la etiqueta Limonadas Refrescantes ===== */
+
+#limonadas h2{
+  position:relative;
+  width:fit-content;
+  padding:10px 22px 10px 50px;
+  overflow:hidden;
+
+  color:#376D1F;
+
+  background:linear-gradient(
+    135deg,
+    #FFFDE7 0%,
+    #F4F7A1 48%,
+    #BFE66B 100%
+  );
+
+  border:1px solid rgba(111,160,47,.4);
+  border-radius:14px;
+
+  box-shadow:
+    0 6px 16px rgba(99,145,43,.20),
+    inset 0 1px 0 rgba(255,255,255,.95);
+
+  text-shadow:0 1px 0 rgba(255,255,255,.9);
+}
+
+/* Reemplaza el punto naranja por un limón */
+#limonadas h2::before{
+  content:"🍋";
+  position:absolute;
+  left:13px;
+  top:50%;
+
+  width:auto;
+  height:auto;
+  background:none;
+  border-radius:0;
+
+  font-size:1.45rem;
+  line-height:1;
+
+  transform:translateY(-50%);
+  filter:drop-shadow(0 3px 3px rgba(81,115,28,.25));
+
+  animation:limonFlotar 2.6s ease-in-out infinite;
+}
+
+/* Burbujas refrescantes dentro de la etiqueta */
+#limonadas h2::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      circle at 72% 25%,
+      rgba(255,255,255,.9) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 85% 68%,
+      rgba(255,255,255,.75) 0 3px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 62% 75%,
+      rgba(255,255,255,.7) 0 1.5px,
+      transparent 3px
+    );
+
+  animation:burbujasLimonada 3s ease-in-out infinite;
+}
+
+@keyframes limonFlotar{
+  0%, 100%{
+    transform:translateY(-50%) rotate(-5deg);
+  }
+
+  50%{
+    transform:translateY(-58%) rotate(5deg);
+  }
+}
+
+@keyframes burbujasLimonada{
+  0%, 100%{
+    opacity:.45;
+    transform:translateY(3px);
+  }
+
+  50%{
+    opacity:1;
+    transform:translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #limonadas h2::before,
+  #limonadas h2::after{
+    animation:none;
+  }
+}
+
+/* =========================================================
+   SISTEMA VISUAL DEL CATALOGO
+   Todas las categorias comparten la misma etiqueta y cada
+   una define solamente su color, icono y personalidad.
+   ========================================================= */
+
+:root{
+  --surface-border:rgba(18,60,44,.10);
+  --shadow-soft:0 10px 30px rgba(42,33,24,.08);
+  --shadow-hover:0 16px 38px rgba(42,33,24,.13);
+}
+
+body{
+  background:
+    radial-gradient(circle at 0 18%, rgba(219,123,43,.07), transparent 26rem),
+    radial-gradient(circle at 100% 64%, rgba(27,94,63,.07), transparent 30rem),
+    var(--cream);
+}
+
+.topbar{
+  border-bottom:1px solid rgba(18,60,44,.08);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  background:rgba(255,253,248,.94);
+}
+
+.hamburger,
+.menu-drawer-head button,
+.menu-drawer a,
+.carousel-card{
+  -webkit-tap-highlight-color:transparent;
+}
+
+.hamburger:hover{
+  background:#EDE2CD;
+}
+
+.hamburger:focus-visible,
+.menu-drawer-head button:focus-visible,
+.menu-drawer a:focus-visible,
+.carousel-card:focus-visible{
+  outline:3px solid rgba(219,123,43,.38);
+  outline-offset:3px;
+}
+
+main{
+  padding-bottom:8px;
+}
+
+section.category{
+  --tag-color:#7B4F2C;
+  --tag-color-dark:#56351E;
+  --tag-soft:#FFF3DF;
+  --tag-soft-2:#F4D19A;
+  --tag-rgb:123,79,44;
+  --tag-icon:"•";
+
+  margin-top:16px;
+  padding:22px 18px 10px;
+  border:1px solid var(--surface-border);
+  border-radius:22px;
+  background:rgba(255,253,248,.82);
+  box-shadow:var(--shadow-soft);
+  scroll-margin-top:78px;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+section.category h2{
+  position:relative;
+  isolation:isolate;
+  width:fit-content;
+  max-width:100%;
+  min-height:46px;
+  margin:-5px 0 6px;
+  padding:11px 20px 11px 50px;
+  overflow:hidden;
+  border:1px solid rgba(var(--tag-rgb),.28);
+  border-radius:14px;
+  color:var(--tag-color-dark);
+  background:linear-gradient(135deg, #FFFFFF 0%, var(--tag-soft) 52%, var(--tag-soft-2) 100%);
+  box-shadow:
+    0 7px 18px rgba(var(--tag-rgb),.15),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  text-shadow:0 1px 0 rgba(255,255,255,.88);
+  line-height:1.15;
+}
+
+section.category h2::before{
+  content:var(--tag-icon);
+  position:absolute;
+  left:14px;
+  top:50%;
+  z-index:2;
+  width:auto;
+  height:auto;
+  flex:none;
+  border-radius:0;
+  background:none;
+  color:var(--tag-color);
+  font-family:"Segoe UI Emoji","Apple Color Emoji",sans-serif;
+  font-size:1.42rem;
+  line-height:1;
+  transform:translateY(-50%);
+  filter:drop-shadow(0 3px 3px rgba(var(--tag-rgb),.18));
+  animation:none;
+}
+
+section.category h2::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 82% 22%, rgba(255,255,255,.88) 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 70%, rgba(255,255,255,.58) 0 3px, transparent 4px);
+  opacity:.78;
+  animation:none;
+}
+
+section.category .divider{
+  height:3px;
+  margin:6px 0 10px;
+  border-radius:999px;
+  background:linear-gradient(90deg, var(--tag-color), rgba(var(--tag-rgb),.2) 72%, transparent);
+  box-shadow:none;
+}
+
+.item{
+  position:relative;
+  align-items:center;
+  min-height:52px;
+  padding:12px 10px;
+  border-bottom:1px solid rgba(138,123,99,.18);
+  border-radius:10px;
+  transition:background-color .18s ease, transform .18s ease;
+}
+
+.item:hover{
+  background:rgba(var(--tag-rgb),.055);
+  transform:translateX(3px);
+}
+
+.item-name{
+  line-height:1.35;
+}
+
+.item-desc{
+  max-width:44ch;
+}
+
+.item-price{
+  min-width:70px;
+  padding:5px 8px;
+  border-radius:999px;
+  color:var(--tag-color-dark);
+  background:rgba(var(--tag-rgb),.08);
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+.item-price::before{
+  color:var(--tag-color);
+}
+
+/* Jugos: frutas vivas y frescas */
+#jugos-combinados{
+  --tag-color:#D35D2B; --tag-color-dark:#873818;
+  --tag-soft:#FFF1D6; --tag-soft-2:#FFC477;
+  --tag-rgb:211,93,43; --tag-icon:"🍹";
+}
+#jugos-clasicos{
+  --tag-color:#E48A17; --tag-color-dark:#874C00;
+  --tag-soft:#FFF8D9; --tag-soft-2:#FFD36C;
+  --tag-rgb:228,138,23; --tag-icon:"🍊";
+}
+#jugos-leche{
+  --tag-color:#9A6A43; --tag-color-dark:#634024;
+  --tag-soft:#FFF9EE; --tag-soft-2:#E8D2B5;
+  --tag-rgb:154,106,67; --tag-icon:"🥛";
+}
+
+/* Bebidas heladas */
+#frappes{
+  --tag-color:#9B5B8C; --tag-color-dark:#633658;
+  --tag-soft:#FFF0FA; --tag-soft-2:#E6B8DC;
+  --tag-rgb:155,91,140; --tag-icon:"🥤";
+}
+#frozen{
+  --tag-color:#257F95; --tag-color-dark:#155363;
+  --tag-soft:#EAFBFF; --tag-soft-2:#A9E1EA;
+  --tag-rgb:37,127,149; --tag-icon:"🧊";
+}
+#iced-coffee{
+  --tag-color:#159CC8; --tag-color-dark:#075E78;
+  --tag-soft:#E8F9FF; --tag-soft-2:#94DCF5;
+  --tag-rgb:21,156,200; --tag-icon:"❄";
+}
+
+/* Cafe y bebidas refrescantes */
+#cafe{
+  --tag-color:#8B522B; --tag-color-dark:#5A2F1D;
+  --tag-soft:#FFF8EA; --tag-soft-2:#DCA15D;
+  --tag-rgb:139,82,43; --tag-icon:"☕";
+}
+#limonadas{
+  --tag-color:#6FA02F; --tag-color-dark:#376D1F;
+  --tag-soft:#FFFDE7; --tag-soft-2:#BFE66B;
+  --tag-rgb:111,160,47; --tag-icon:"🍋";
+}
+
+/* Cocteleria */
+#cocteles{
+  --tag-color:#B63F69; --tag-color-dark:#74233F;
+  --tag-soft:#FFF0F5; --tag-soft-2:#F3A5BE;
+  --tag-rgb:182,63,105; --tag-icon:"🍸";
+}
+#chilcanos{
+  --tag-color:#536FB5; --tag-color-dark:#314477;
+  --tag-soft:#F1F5FF; --tag-soft-2:#B7C8F4;
+  --tag-rgb:83,111,181; --tag-icon:"🥂";
+}
+
+/* Salados */
+#sandwich{
+  --tag-color:#A46B24; --tag-color-dark:#684313;
+  --tag-soft:#FFF7E5; --tag-soft-2:#EDC474;
+  --tag-rgb:164,107,36; --tag-icon:"🥪";
+}
+#hamburguesas{
+  --tag-color:#B6532F; --tag-color-dark:#74321C;
+  --tag-soft:#FFF1E8; --tag-soft-2:#EFA47F;
+  --tag-rgb:182,83,47; --tag-icon:"🍔";
+}
+#empanadas{
+  --tag-color:#C58520; --tag-color-dark:#76500F;
+  --tag-soft:#FFF9E3; --tag-soft-2:#F1CB68;
+  --tag-rgb:197,133,32; --tag-icon:"🥟";
+}
+
+/* Frescos y dulces */
+#ensaladas{
+  --tag-color:#438B42; --tag-color-dark:#285E2B;
+  --tag-soft:#F1FBEA; --tag-soft-2:#A9D98A;
+  --tag-rgb:67,139,66; --tag-icon:"🍓";
+}
+#postres{
+  --tag-color:#B65575; --tag-color-dark:#743247;
+  --tag-soft:#FFF2F6; --tag-soft-2:#EDB2C4;
+  --tag-rgb:182,85,117; --tag-icon:"🍰";
+}
+#rollos{
+  --tag-color:#9A6035; --tag-color-dark:#60391F;
+  --tag-soft:#FFF7EC; --tag-soft-2:#DDB485;
+  --tag-rgb:154,96,53; --tag-icon:"🌀";
+}
+
+@media (hover:hover) and (pointer:fine){
+  section.category:hover{
+    transform:translateY(-2px);
+    border-color:rgba(var(--tag-rgb),.2);
+    box-shadow:var(--shadow-hover);
+  }
+}
+
+@media (min-width:640px){
+  main{
+    max-width:760px;
+    padding-left:22px;
+    padding-right:22px;
+  }
+
+  section.category{
+    padding:26px 24px 14px;
+  }
+
+  section.category h2{
+    font-size:1.42rem;
+  }
+}
+
+@media (max-width:420px){
+  main{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  section.category{
+    margin-top:12px;
+    padding:18px 11px 8px;
+    border-radius:18px;
+  }
+
+  section.category h2{
+    min-height:43px;
+    padding:10px 14px 10px 44px;
+    font-size:1.2rem;
+  }
+
+  section.category h2::before{
+    left:12px;
+    font-size:1.25rem;
+  }
+
+  .item{
+    gap:6px;
+    padding-left:6px;
+    padding-right:6px;
+  }
+
+  .item-name{
+    font-size:.94rem;
+  }
+
+  .item-price{
+    min-width:64px;
+    padding-left:6px;
+    padding-right:6px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}
