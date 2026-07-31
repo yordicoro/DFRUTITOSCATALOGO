@@ -554,7 +554,6 @@
 
   <section class="category" id="ensaladas">
   <h2>Ensalada de Fruta</h2>
-  <div class="divider"></div>
   <div class="item">
     <div class="item-info"><div class="item-name">Ensalada de fruta</div></div>
     <div class="item-price">12.00</div>
@@ -683,34 +682,19 @@
         cards[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
       });
     });
-    let ticking = false;
 
+    let scrollTimeout;
     recoTrack.addEventListener('scroll', () => {
-      if (ticking) return;
-
-      ticking = true;
-
-      requestAnimationFrame(() => {
-        const trackRect = recoTrack.getBoundingClientRect();
-        const trackCenter = trackRect.left + trackRect.width / 2;
-
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
         let closestIndex = 0;
         let closestDist = Infinity;
-
         cards.forEach((card, i) => {
-          const cardRect = card.getBoundingClientRect();
-          const cardCenter = cardRect.left + cardRect.width / 2;
-          const distance = Math.abs(trackCenter - cardCenter);
-
-          if (distance < closestDist) {
-            closestDist = distance;
-            closestIndex = i;
-          }
+          const dist = Math.abs(card.offsetLeft - recoTrack.scrollLeft);
+          if (dist < closestDist) { closestDist = dist; closestIndex = i; }
         });
-
         setActiveCard(closestIndex);
-        ticking = false;
-      });
+      }, 80);
     });
 
     // Activar la primera tarjeta al cargar
