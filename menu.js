@@ -168,6 +168,11 @@
     const product = event.target.closest('.item-preview');
     if (product && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); openPreview(product); }
   });
+  gallery.addEventListener('click', (e) => {
+    if (e.target.tagName === 'IMG') {
+      e.target.classList.toggle('zoomed');
+    }
+  });
   gallery.addEventListener('scroll', () => selectDot(Math.round(gallery.scrollLeft / gallery.clientWidth)), {passive: true});
   gallery.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
