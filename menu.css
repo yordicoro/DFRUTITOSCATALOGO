@@ -475,7 +475,7 @@ section.category{scroll-margin-top:calc(80px + env(safe-area-inset-top));}
   *, *::before, *::after{animation:none!important; transition:none!important; scroll-behavior:auto!important;}
 }
 
---acercar Imagen 
+/* Acercar imagen */
 .preview-slide {
   overflow: hidden;
 }
@@ -490,3 +490,16 @@ section.category{scroll-margin-top:calc(80px + env(safe-area-inset-top));}
   cursor: zoom-out;
   transform: scale(1.8);
 }
+/* Redes sociales al pie de la carta */
+footer{opacity:1;}
+.social-links{display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:18px;}
+.social-links a{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height:44px; padding:10px 16px; border:1px solid #D4CDBB; border-radius:24px;
+  color:var(--green-deep); background:var(--paper); text-decoration:none;
+  font-size:.85rem; font-weight:600;
+}
+.social-links svg{width:19px; height:19px; flex-shrink:0;}
+@media(hover:hover){.social-links a:hover{background:var(--cream-2); border-color:var(--green);}}
+.social-links a:focus-visible{outline:3px solid var(--green); outline-offset:3px;}
+.social-links a:active{background:var(--cream-2);}
