@@ -98,95 +98,115 @@
     name.insertAdjacentHTML('beforeend', camera);
   });
 
-  // Real image dimensions create scrollable space; no centered CSS transform clipping.
-  function zoomDimensions(width, height, naturalWidth, naturalHeight) {
-    const fit = Math.min(width / naturalWidth, height / naturalHeight);
-    const imageWidth = naturalWidth * fit * 2.5;
-    const imageHeight = naturalHeight * fit * 2.5;
-    return {imageWidth, imageHeight, width: Math.max(width, imageWidth), height: Math.max(height, imageHeight)};
-  }
+  const zoomControllers = new Map();
+  const clampZoom = value => Math.max(1, Math.min(4, value));
   function resetZoom() {
-    gallery.querySelectorAll('.image-viewport.is-zoomed').forEach(viewport => {
-      viewport.classList.remove('is-zoomed', 'is-dragging');
-      viewport.querySelector('.image-surface').removeAttribute('style');
-      viewport.querySelector('img').removeAttribute('style');
-      viewport.scrollTo({left: 0, top: 0, behavior: 'instant'});
-      const button = viewport.parentElement.querySelector('.image-zoom-button');
-      button.textContent = 'Ampliar';
-      button.setAttribute('aria-pressed', 'false');
-      button.setAttribute('aria-label', 'Ampliar imagen');
-    });
+    zoomControllers.forEach(controller => controller.reset());
     gallery.classList.remove('has-zoom');
   }
   function configureImageZoom(slide, image) {
     const viewport = document.createElement('div');
     viewport.className = 'image-viewport';
+    viewport.tabIndex = 0;
+    viewport.setAttribute('role', 'group');
+    viewport.setAttribute('aria-label', 'Imagen: separa dos dedos para ampliar y arrastra para explorar. Con teclado, Enter amplía o reduce y las flechas desplazan.');
     const surface = document.createElement('div');
     surface.className = 'image-surface';
     surface.appendChild(image);
     viewport.appendChild(surface);
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'image-zoom-button';
-    button.textContent = 'Ampliar';
-    button.setAttribute('aria-label', 'Ampliar imagen');
-    button.setAttribute('aria-pressed', 'false');
-    button.disabled = true;
+    slide.appendChild(viewport);
     image.draggable = false;
-    const ready = () => { button.disabled = !image.naturalWidth; };
-    image.addEventListener('load', ready);
-    image.addEventListener('error', () => { button.hidden = true; viewport.hidden = true; resetZoom(); });
-    if (image.complete) ready();
-    function toggleZoom() {
-      if (image.hidden || !image.naturalWidth) return;
-      if (viewport.classList.contains('is-zoomed')) { resetZoom(); return; }
-      resetZoom();
-      const size = zoomDimensions(viewport.clientWidth, viewport.clientHeight, image.naturalWidth, image.naturalHeight);
-      surface.style.width = `${size.width}px`;
-      surface.style.height = `${size.height}px`;
-      image.style.width = `${size.imageWidth}px`;
-      image.style.height = `${size.imageHeight}px`;
+    let scale = 1, pinch = null, moved = false, axis = null;
+    const pointers = new Map();
+    function reset() {
+      scale = 1;
+      viewport.classList.remove('is-zoomed', 'is-dragging');
+      surface.removeAttribute('style');
+      image.removeAttribute('style');
+      viewport.scrollTo({left: 0, top: 0, behavior: 'instant'});
+    }
+    zoomControllers.set(viewport, {reset});
+    function setZoom(value, x = viewport.clientWidth / 2, y = viewport.clientHeight / 2) {
+      if (!image.naturalWidth || image.hidden) return;
+      const next = clampZoom(value);
+      const w = viewport.clientWidth, h = viewport.clientHeight;
+      if (!w || !h) return;
+      const fit = Math.max(w / image.naturalWidth, h / image.naturalHeight);
+      const oldW = image.naturalWidth * fit * scale;
+      const oldH = image.naturalHeight * fit * scale;
+      // At rest cover crops centrally; account for that crop when starting a pinch.
+      const px = scale === 1 ? (x + (oldW - w) / 2) / oldW : (viewport.scrollLeft + x) / oldW;
+      const py = scale === 1 ? (y + (oldH - h) / 2) / oldH : (viewport.scrollTop + y) / oldH;
+      if (next <= 1.01) { reset(); gallery.classList.remove('has-zoom'); return; }
+      scale = next;
+      const newW = image.naturalWidth * fit * scale;
+      const newH = image.naturalHeight * fit * scale;
+      surface.style.width = `${newW}px`;
+      surface.style.height = `${newH}px`;
+      image.style.width = `${newW}px`;
+      image.style.height = `${newH}px`;
       viewport.classList.add('is-zoomed');
       gallery.classList.add('has-zoom');
-      viewport.scrollTo({left: (size.width - viewport.clientWidth) / 2, top: (size.height - viewport.clientHeight) / 2, behavior: 'instant'});
-      button.textContent = 'Reducir';
-      button.setAttribute('aria-label', 'Reducir imagen. Puedes desplazarla con el dedo, el ratón o las flechas');
-      button.setAttribute('aria-pressed', 'true');
+      viewport.scrollTo({left: px * newW - x, top: py * newH - y, behavior: 'instant'});
     }
-    button.addEventListener('click', toggleZoom);
-    let pointer = null;
-    let moved = false;
+    function pair() {
+      const [a,b] = [...pointers.values()];
+      return {distance: Math.hypot(a.x-b.x,a.y-b.y), x:(a.x+b.x)/2, y:(a.y+b.y)/2};
+    }
     viewport.addEventListener('pointerdown', event => {
-      moved = false;
-      if (!event.isPrimary || event.button !== 0) return;
-      pointer = {id: event.pointerId, x: event.clientX, y: event.clientY,
-        left: viewport.scrollLeft, top: viewport.scrollTop,
-        drag: event.pointerType === 'mouse' && viewport.classList.contains('is-zoomed')};
+      if (event.button !== 0) return;
+      if (!pointers.size) { moved = false; axis = null; }
+      pointers.set(event.pointerId, {x:event.clientX,y:event.clientY,startX:event.clientX,startY:event.clientY});
+      viewport.setPointerCapture(event.pointerId);
+      if (pointers.size === 2) { pinch = {...pair(), scale}; moved = true; }
     });
     viewport.addEventListener('pointermove', event => {
-      if (!pointer || pointer.id !== event.pointerId) return;
-      const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
-      if (Math.hypot(dx, dy) > 6) moved = true;
-      if (!pointer.drag || !moved) return;
-      if (!viewport.hasPointerCapture(event.pointerId)) viewport.setPointerCapture(event.pointerId);
-      viewport.classList.add('is-dragging');
-      viewport.scrollLeft = pointer.left - dx;
-      viewport.scrollTop = pointer.top - dy;
+      const previous = pointers.get(event.pointerId);
+      if (!previous) return;
+      const dx = event.clientX-previous.x, dy = event.clientY-previous.y;
+      pointers.set(event.pointerId, {...previous,x:event.clientX,y:event.clientY});
+      if (pointers.size >= 2 && pinch) {
+        const current = pair(), rect = viewport.getBoundingClientRect();
+        setZoom(pinch.scale * current.distance / Math.max(1,pinch.distance), current.x-rect.left,current.y-rect.top);
+        return;
+      }
+      const totalX = event.clientX-previous.startX, totalY = event.clientY-previous.startY;
+      if (Math.hypot(totalX,totalY)>5) moved=true;
+      if (!moved) return;
+      if (scale>1) {
+        viewport.scrollLeft -= dx;
+        viewport.scrollTop -= dy;
+        viewport.classList.add('is-dragging');
+      } else if (event.pointerType !== 'mouse') {
+        axis ||= Math.abs(totalX)>Math.abs(totalY) ? 'x' : 'y';
+        if (axis==='x') { gallery.classList.add('is-swiping'); gallery.scrollLeft -= dx; }
+        else sheet.scrollTop -= dy;
+      }
     });
-    function endPointer(event) {
-      if (event.type === 'pointercancel') moved = true;
+    function finishPointer(event) {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.delete(event.pointerId);
       if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
-      viewport.classList.remove('is-dragging');
-      pointer = null;
+      if (pointers.size<2) pinch=null;
+      if (!pointers.size) {
+        viewport.classList.remove('is-dragging');
+        if (gallery.classList.contains('is-swiping')) {
+          const page = Math.round(gallery.scrollLeft/gallery.clientWidth);
+          gallery.classList.remove('is-swiping');
+          gallery.scrollTo({left:page*gallery.clientWidth,behavior:reducedMotion.matches?'instant':'smooth'});
+        }
+        // Mouse retains click-to-zoom; touch uses only the two-finger gesture.
+        if (!moved && event.pointerType==='mouse' && event.type==='pointerup') setZoom(scale>1?1:2.5);
+      }
     }
-    viewport.addEventListener('pointerup', endPointer);
-    viewport.addEventListener('pointercancel', endPointer);
-    viewport.addEventListener('click', event => {
-      if (!moved && event.target === image) toggleZoom();
+    viewport.addEventListener('pointerup', finishPointer);
+    viewport.addEventListener('pointercancel', finishPointer);
+    viewport.addEventListener('lostpointercapture', finishPointer);
+    viewport.addEventListener('keydown', event => {
+      if (event.key==='Enter' || event.key===' ') { event.preventDefault(); event.stopPropagation(); setZoom(scale>1?1:2.5); }
     });
-    slide.append(viewport, button);
+    image.addEventListener('error', () => { reset(); viewport.hidden=true; gallery.classList.remove('has-zoom'); });
   }
-  // On rotation/resize return to a complete, correctly fitted image.
   new ResizeObserver(() => resetZoom()).observe(gallery);
 
   function selectDot(index) {
@@ -207,6 +227,7 @@
     description.textContent = item.dataset.description || item.querySelector('.item-desc')?.textContent || '';
     description.hidden = !description.textContent;
     resetZoom();
+    zoomControllers.clear();
     gallery.replaceChildren();
     dots.replaceChildren();
     dots.hidden = paths.length < 2;

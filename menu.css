@@ -477,16 +477,13 @@ section.category{scroll-margin-top:calc(80px + env(safe-area-inset-top));}
 
 /* Responsive image viewport with scrollable zoom in both directions. */
 .preview-slide{position:relative; display:block; aspect-ratio:auto; height:min(100vw, 48vh, 560px); height:min(100vw, 48dvh, 560px); overflow:hidden;}
-.image-viewport{width:100%; height:100%; overflow:hidden; background:var(--cream);}
+.image-viewport{width:100%; height:100%; touch-action:none; overflow:hidden; background:var(--cream);}
 .image-surface{width:100%; height:100%; display:grid; place-items:center;}
-.preview-slide .image-surface img{width:100%; height:100%; max-width:none; object-fit:contain; cursor:zoom-in; user-select:none; -webkit-user-drag:none;}
-.image-viewport.is-zoomed{overflow:auto; overscroll-behavior:contain; touch-action:pan-x pan-y;}
+.preview-slide .image-surface img{width:100%; height:100%; max-width:none; object-fit:cover; cursor:zoom-in; user-select:none; -webkit-user-drag:none;}
+.image-viewport.is-zoomed{overflow:auto; overscroll-behavior:contain; touch-action:none;}
 .image-viewport.is-zoomed img{cursor:grab;}
 .image-viewport.is-dragging img{cursor:grabbing;}
 .preview-gallery.has-zoom{overflow:hidden; scroll-snap-type:none;}
-.image-zoom-button{position:absolute; right:12px; bottom:12px; z-index:1; min-height:44px; padding:8px 16px; border:1px solid #D4CDBB; border-radius:24px; background:var(--paper); color:var(--green-deep); font:600 .85rem 'Work Sans',sans-serif; cursor:pointer;}
-.image-zoom-button:disabled{opacity:.6; cursor:wait;}
-.image-zoom-button[hidden], .image-viewport[hidden]{display:none;}
 .preview-slide .image-fallback{height:100%; display:grid; place-items:center;}
 
 /* Redes sociales al pie de la carta */
@@ -502,3 +499,7 @@ footer{opacity:1;}
 @media(hover:hover){.social-links a:hover{background:var(--cream-2); border-color:var(--green);}}
 .social-links a:focus-visible{outline:3px solid var(--green); outline-offset:3px;}
 .social-links a:active{background:var(--cream-2);}
+
+.image-viewport[hidden]{display:none;}
+.preview-gallery.is-swiping{scroll-snap-type:none;}
+.image-viewport:focus-visible{outline:3px solid var(--green); outline-offset:-3px;}
