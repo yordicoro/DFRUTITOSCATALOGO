@@ -98,6 +98,97 @@
     name.insertAdjacentHTML('beforeend', camera);
   });
 
+  // Real image dimensions create scrollable space; no centered CSS transform clipping.
+  function zoomDimensions(width, height, naturalWidth, naturalHeight) {
+    const fit = Math.min(width / naturalWidth, height / naturalHeight);
+    const imageWidth = naturalWidth * fit * 2.5;
+    const imageHeight = naturalHeight * fit * 2.5;
+    return {imageWidth, imageHeight, width: Math.max(width, imageWidth), height: Math.max(height, imageHeight)};
+  }
+  function resetZoom() {
+    gallery.querySelectorAll('.image-viewport.is-zoomed').forEach(viewport => {
+      viewport.classList.remove('is-zoomed', 'is-dragging');
+      viewport.querySelector('.image-surface').removeAttribute('style');
+      viewport.querySelector('img').removeAttribute('style');
+      viewport.scrollTo({left: 0, top: 0, behavior: 'instant'});
+      const button = viewport.parentElement.querySelector('.image-zoom-button');
+      button.textContent = 'Ampliar';
+      button.setAttribute('aria-pressed', 'false');
+      button.setAttribute('aria-label', 'Ampliar imagen');
+    });
+    gallery.classList.remove('has-zoom');
+  }
+  function configureImageZoom(slide, image) {
+    const viewport = document.createElement('div');
+    viewport.className = 'image-viewport';
+    const surface = document.createElement('div');
+    surface.className = 'image-surface';
+    surface.appendChild(image);
+    viewport.appendChild(surface);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'image-zoom-button';
+    button.textContent = 'Ampliar';
+    button.setAttribute('aria-label', 'Ampliar imagen');
+    button.setAttribute('aria-pressed', 'false');
+    button.disabled = true;
+    image.draggable = false;
+    const ready = () => { button.disabled = !image.naturalWidth; };
+    image.addEventListener('load', ready);
+    image.addEventListener('error', () => { button.hidden = true; viewport.hidden = true; resetZoom(); });
+    if (image.complete) ready();
+    function toggleZoom() {
+      if (image.hidden || !image.naturalWidth) return;
+      if (viewport.classList.contains('is-zoomed')) { resetZoom(); return; }
+      resetZoom();
+      const size = zoomDimensions(viewport.clientWidth, viewport.clientHeight, image.naturalWidth, image.naturalHeight);
+      surface.style.width = `${size.width}px`;
+      surface.style.height = `${size.height}px`;
+      image.style.width = `${size.imageWidth}px`;
+      image.style.height = `${size.imageHeight}px`;
+      viewport.classList.add('is-zoomed');
+      gallery.classList.add('has-zoom');
+      viewport.scrollTo({left: (size.width - viewport.clientWidth) / 2, top: (size.height - viewport.clientHeight) / 2, behavior: 'instant'});
+      button.textContent = 'Reducir';
+      button.setAttribute('aria-label', 'Reducir imagen. Puedes desplazarla con el dedo, el ratón o las flechas');
+      button.setAttribute('aria-pressed', 'true');
+    }
+    button.addEventListener('click', toggleZoom);
+    let pointer = null;
+    let moved = false;
+    viewport.addEventListener('pointerdown', event => {
+      moved = false;
+      if (!event.isPrimary || event.button !== 0) return;
+      pointer = {id: event.pointerId, x: event.clientX, y: event.clientY,
+        left: viewport.scrollLeft, top: viewport.scrollTop,
+        drag: event.pointerType === 'mouse' && viewport.classList.contains('is-zoomed')};
+    });
+    viewport.addEventListener('pointermove', event => {
+      if (!pointer || pointer.id !== event.pointerId) return;
+      const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
+      if (Math.hypot(dx, dy) > 6) moved = true;
+      if (!pointer.drag || !moved) return;
+      if (!viewport.hasPointerCapture(event.pointerId)) viewport.setPointerCapture(event.pointerId);
+      viewport.classList.add('is-dragging');
+      viewport.scrollLeft = pointer.left - dx;
+      viewport.scrollTop = pointer.top - dy;
+    });
+    function endPointer(event) {
+      if (event.type === 'pointercancel') moved = true;
+      if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+      viewport.classList.remove('is-dragging');
+      pointer = null;
+    }
+    viewport.addEventListener('pointerup', endPointer);
+    viewport.addEventListener('pointercancel', endPointer);
+    viewport.addEventListener('click', event => {
+      if (!moved && event.target === image) toggleZoom();
+    });
+    slide.append(viewport, button);
+  }
+  // On rotation/resize return to a complete, correctly fitted image.
+  new ResizeObserver(() => resetZoom()).observe(gallery);
+
   function selectDot(index) {
     [...dots.children].forEach((dot, i) => {
       dot.setAttribute('aria-pressed', String(i === index));
@@ -115,6 +206,7 @@
     const description = document.getElementById('previewDescription');
     description.textContent = item.dataset.description || item.querySelector('.item-desc')?.textContent || '';
     description.hidden = !description.textContent;
+    resetZoom();
     gallery.replaceChildren();
     dots.replaceChildren();
     dots.hidden = paths.length < 2;
@@ -137,13 +229,16 @@
         slide.appendChild(fallback);
       }, {once: true});
       image.src = path;
-      slide.appendChild(image);
+      configureImageZoom(slide, image);
       gallery.appendChild(slide);
       if (paths.length > 1) {
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.setAttribute('aria-label', `Ver fotografía ${index + 1}`);
-        dot.addEventListener('click', () => gallery.scrollTo({left: index * gallery.clientWidth, behavior: reducedMotion.matches ? 'instant' : 'smooth'}));
+        dot.addEventListener('click', () => {
+          resetZoom();
+          gallery.scrollTo({left: index * gallery.clientWidth, behavior: reducedMotion.matches ? 'instant' : 'smooth'});
+        });
         dots.appendChild(dot);
       }
     });
@@ -168,18 +263,22 @@
     const product = event.target.closest('.item-preview');
     if (product && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); openPreview(product); }
   });
-  gallery.addEventListener('click', (e) => {
-    if (e.target.tagName === 'IMG') {
-      e.target.classList.toggle('zoomed');
-    }
-  });
   gallery.addEventListener('scroll', () => selectDot(Math.round(gallery.scrollLeft / gallery.clientWidth)), {passive: true});
   gallery.addEventListener('keydown', event => {
+    const zoomed = gallery.querySelector('.image-viewport.is-zoomed');
+    if (zoomed && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+      event.preventDefault();
+      zoomed.scrollBy({left: event.key === 'ArrowLeft' ? -80 : event.key === 'ArrowRight' ? 80 : 0,
+        top: event.key === 'ArrowUp' ? -80 : event.key === 'ArrowDown' ? 80 : 0,
+        behavior: reducedMotion.matches ? 'instant' : 'smooth'});
+      return;
+    }
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();
     gallery.scrollBy({left: (event.key === 'ArrowRight' ? 1 : -1) * gallery.clientWidth, behavior: reducedMotion.matches ? 'instant' : 'smooth'});
   });
   function finishClose() {
+    resetZoom();
     clearTimeout(closeTimer);
     sheet.classList.remove('closing');
     closing = false;
