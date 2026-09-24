@@ -252,6 +252,43 @@
       dot.setAttribute('aria-pressed', String(i === index));
     });
   }
+  const pendingImageLoads = new Set();
+  function clearImageLoading() {
+    [...pendingImageLoads].forEach(finish => finish());
+  }
+  function configureImageLoading(slide, image) {
+    const status = document.createElement('div');
+    status.className = 'image-loading-status';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    status.hidden = true;
+    slide.appendChild(status);
+    image.setAttribute('aria-busy', 'true');
+    slide.classList.add('image-pending');
+    let finished = false;
+    const timer = setTimeout(() => {
+      if (finished || !slide.isConnected) return;
+      status.hidden = false;
+      status.textContent = 'Cargando imagen…';
+    }, 200);
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      status.remove();
+      image.removeAttribute('aria-busy');
+      slide.classList.remove('image-pending');
+      pendingImageLoads.delete(finish);
+    }
+    pendingImageLoads.add(finish);
+    image.addEventListener('load', () => {
+      // Keep the status until the downloaded image is decoded and ready to paint.
+      if (typeof image.decode === 'function') image.decode().then(finish, finish);
+      else finish();
+    }, {once: true});
+    image.addEventListener('error', finish, {once: true});
+  }
+
   function openPreview(item, source = item) {
     const paths = imagePaths(item);
     if (!paths.length || sheet.open || closing) return;
@@ -265,6 +302,7 @@
     description.textContent = item.dataset.description || item.querySelector('.item-desc')?.textContent || '';
     description.hidden = !description.textContent;
     resetZoom();
+    clearImageLoading();
     zoomControllers.clear();
     gallery.replaceChildren();
     dots.replaceChildren();
@@ -287,8 +325,9 @@
         fallback.textContent = 'La fotografía no está disponible en este momento.';
         slide.appendChild(fallback);
       }, {once: true});
-      image.src = path;
       configureImageZoom(slide, image);
+      configureImageLoading(slide, image);
+      image.src = path;
       gallery.appendChild(slide);
       if (paths.length > 1) {
         const dot = document.createElement('button');
@@ -337,6 +376,7 @@
     gallery.scrollBy({left: (event.key === 'ArrowRight' ? 1 : -1) * gallery.clientWidth, behavior: reducedMotion.matches ? 'instant' : 'smooth'});
   });
   function finishClose() {
+    clearImageLoading();
     resetZoom();
     clearTimeout(closeTimer);
     sheet.classList.remove('closing');

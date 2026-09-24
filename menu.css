@@ -503,3 +503,18 @@ footer{opacity:1;}
 .image-viewport[hidden]{display:none;}
 .preview-gallery.is-swiping{scroll-snap-type:none;}
 .image-viewport:focus-visible{outline:3px solid var(--green); outline-offset:-3px;}
+
+/* Show feedback only for images that take longer than 200 ms. */
+.preview-slide.image-pending img{opacity:0;}
+.image-loading-status{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:12px; pointer-events:none;
+  background:var(--cream); color:var(--green-deep); font-size:.9rem;
+}
+.image-loading-status[hidden]{display:none;}
+.image-loading-status::before{
+  content:''; width:26px; height:26px; border:3px solid #D4CDBB;
+  border-top-color:var(--green); border-radius:50%; animation:image-loading-spin .8s linear infinite;
+}
+@keyframes image-loading-spin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){.image-loading-status::before{animation:none;}}
