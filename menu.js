@@ -79,6 +79,44 @@
   window.addEventListener('scroll', updateCategory, {passive: true});
   updateCategory();
 
+  const recommendedTrack = document.getElementById('recoTrack');
+  const recommendedDots = document.getElementById('recoDots');
+
+  if (recommendedTrack && recommendedDots) {
+    const cards = [...recommendedTrack.querySelectorAll('.carousel-card')];
+    const dots = cards.map((_, index) => {
+      const dot = document.createElement('span');
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('tabindex', '0');
+      dot.setAttribute('aria-label', `Ver recomendación ${index + 1}`);
+      dot.addEventListener('click', () => {
+        cards[index].scrollIntoView({behavior: reducedMotion.matches ? 'auto' : 'smooth', inline: 'center', block: 'nearest'});
+      });
+      dot.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          cards[index].scrollIntoView({behavior: reducedMotion.matches ? 'auto' : 'smooth', inline: 'center', block: 'nearest'});
+        }
+      });
+      recommendedDots.appendChild(dot);
+      return dot;
+    });
+
+    function updateRecommendedCarousel() {
+      const center = recommendedTrack.scrollLeft + recommendedTrack.clientWidth / 2;
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const active = Math.abs(center - cardCenter) < card.offsetWidth * 0.55;
+        card.classList.toggle('active', active);
+        dots[index].classList.toggle('active', active);
+      });
+    }
+
+    updateRecommendedCarousel();
+    recommendedTrack.addEventListener('scroll', () => requestAnimationFrame(updateRecommendedCarousel), {passive: true});
+    window.addEventListener('resize', updateRecommendedCarousel);
+  }
+
   const imagePaths = item => (item.dataset.images || '').split(',').map(path => path.trim()).filter(Boolean).slice(0, 2);
   const camera = '<svg class="photo-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7h4l2-3h6l2 3h4v13H3z"/><circle cx="12" cy="13" r="4"/></svg>';
   document.querySelectorAll('.item-preview').forEach(item => {
