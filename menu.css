@@ -264,6 +264,43 @@
     background:var(--orange);
     margin:0 auto 12px;
   }
+  .footer-intro{
+    margin:0 auto 16px;
+    font-size:0.82rem;
+    line-height:1.5;
+    color:var(--green-deep);
+    opacity:0.9;
+  }
+  .store-locations{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:12px;
+    max-width:820px;
+    margin:0 auto;
+    text-align:left;
+  }
+  .store-card{
+    background:rgba(255,255,255,0.45);
+    border:1px solid rgba(18,60,44,0.12);
+    border-radius:16px;
+    padding:14px 16px;
+    box-shadow:0 2px 10px rgba(18,60,44,0.04);
+  }
+  .store-label{
+    display:inline-block;
+    margin-bottom:6px;
+    font-size:0.7rem;
+    font-weight:700;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    color:var(--orange);
+  }
+  .store-card p{
+    margin:0;
+    font-size:0.82rem;
+    line-height:1.55;
+    color:var(--green-deep);
+  }
 
   @media (min-width:640px){
     .hero h1{font-size:2.4rem;}
