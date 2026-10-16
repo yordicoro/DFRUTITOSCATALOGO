@@ -573,3 +573,42 @@ footer{opacity:1;}
 }
 @keyframes image-loading-spin{to{transform:rotate(360deg);}}
 @media(prefers-reduced-motion:reduce){.image-loading-status::before{animation:none;}}
+
+/* Campaña temporal de octubre de 2026; el tema habitual queda como base. */
+body.octubre-morado{
+  --green-deep:#48234f;
+  --green:#713979;
+  --orange:#c58b45;
+  --orange-light:#e2ba78;
+  --cream:#fbf5e9;
+  --cream-2:#f2e8f1;
+  --ink:#2a2118;
+  --paper:#fffdf8;
+}
+body.octubre-morado .seasonal-ribbon{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  padding:10px 16px;
+  background:#3f1d46;
+  color:#fff8ea;
+  text-align:center;
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:1.4px;
+  line-height:1.35;
+  text-transform:uppercase;
+}
+body.octubre-morado .seasonal-ribbon span + span::before{
+  content:'·';
+  margin-right:14px;
+  color:#e2ba78;
+}
+body.octubre-morado .hero{
+  background:radial-gradient(circle at 50% -10%, #794583 0%, #48234f 72%);
+}
+body.octubre-morado .hero img{border-color:#e2ba78;}
+body.octubre-morado .hero p.tag{color:#f0d49a;}
+body.octubre-morado .menu-overlay{background:rgba(49,23,55,.58);}
