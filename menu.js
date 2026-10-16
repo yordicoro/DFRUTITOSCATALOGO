@@ -4,22 +4,13 @@
   const limaDate = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Lima',
     year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
+    month: '2-digit'
   }).formatToParts(new Date());
   const limaDateParts = Object.fromEntries(limaDate.map(({type, value}) => [type, value]));
-  const isOctober2026 = limaDateParts.year === '2026' && limaDateParts.month === '10';
-  const isHalloweenCampaign = isOctober2026 && limaDateParts.day === '31';
-  if (isOctober2026) {
-    const ribbon = document.getElementById('seasonalRibbon');
-    if (isHalloweenCampaign) {
-      document.body.classList.add('halloween-2026');
-      ribbon.children[0].textContent = 'Noche de Halloween';
-      ribbon.children[1].textContent = 'Disfruta algo rico en Estación Frutal';
-    } else {
-      document.body.classList.add('octubre-morado');
-    }
-    ribbon.hidden = false;
+  const isOctoberMoradoCampaign = limaDateParts.year === '2026' && limaDateParts.month === '10';
+  if (isOctoberMoradoCampaign) {
+    document.body.classList.add('octubre-morado');
+    document.getElementById('seasonalRibbon').hidden = false;
   }
 
   const drawer = document.getElementById('menuDrawer');
