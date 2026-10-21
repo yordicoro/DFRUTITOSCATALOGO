@@ -1,0 +1,226 @@
+/* Adaptación Halloween para Estación Frutal. Se carga sobre menu.css y conserva intacta la vista habitual. */
+body.theme-halloween {
+  --green-deep:#28182F;
+  --green:#3A2243;
+  --green-deep:#493651;
+  --orange:#B8501D;
+  --orange-light:#FFB56B;
+  --cream:#FAF4EA;
+  --cream-2:#F0E5D8;
+  --ink:#2B2030;
+  --paper:#FFFCF7;
+  background:var(--cream);
+  color:var(--ink);
+}
+
+body.theme-halloween .hero {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(127,76,139,.3), transparent 55%),
+    linear-gradient(145deg, #211629, #3A2243 68%, #4A2C4C);
+}
+
+body.theme-halloween .hero::after { background:var(--cream); }
+body.theme-halloween .seasonal-label {
+  position:relative;
+  display:inline-block;
+  margin:10px 0 4px;
+  padding:6px 14px;
+  border:1px solid rgba(255,181,107,.7);
+  border-radius:999px;
+  color:#FFE0B8;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+body.theme-halloween .seasonal-label::before,
+body.theme-halloween .seasonal-label::after {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:1.3rem;
+  line-height:1;
+  pointer-events:none;
+}
+body.theme-halloween .seasonal-label::before {
+  content:"\01F383";
+  left:-32px;
+}
+body.theme-halloween .seasonal-label::after {
+  content:"\01F383";
+  right:-32px;
+}
+
+body.theme-halloween .topbar { background:var(--paper); }
+body.theme-halloween .hamburger { background:var(--cream-2); }
+body.theme-halloween .hamburger:active { background:#F6D3AE; }
+body.theme-halloween .hamburger span { background:var(--green-deep); }
+body.theme-halloween .topbar .brand span { color:var(--green-deep); }
+body.theme-halloween .menu-overlay { background:rgba(31,19,39,.68); }
+body.theme-halloween .menu-drawer { background:var(--paper); }
+body.theme-halloween .menu-drawer-head {
+  background:var(--green-deep);
+  color:#FFF8EE;
+}
+body.theme-halloween .menu-drawer-head button { color:#FFF8EE; }
+body.theme-halloween .menu-drawer .group-label,
+body.theme-halloween .menu-drawer a:active,
+body.theme-halloween .menu-drawer a.active { color:var(--green-deep); }
+body.theme-halloween .menu-drawer a:active,
+body.theme-halloween .menu-drawer a.active { background:var(--cream-2); }
+
+body.theme-halloween section.category h2,
+body.theme-halloween .carousel-section h2 { color:var(--green-deep); }
+body.theme-halloween section.category h2::before,
+body.theme-halloween .carousel-section h2::before,
+body.theme-halloween footer .fline { background:var(--orange); }
+body.theme-halloween section.category .divider {
+  background:linear-gradient(90deg, var(--orange) 0%, transparent 76%);
+}
+body.theme-halloween .item-name { color:var(--ink); }
+body.theme-halloween .item-desc { color:#65586A; }
+body.theme-halloween .item-price,
+body.theme-halloween .item-price::before,
+body.theme-halloween .carousel-card-price,
+body.theme-halloween .carousel-card-price::before { color:var(--orange); }
+body.theme-halloween .photo-icon {
+  color:var(--orange);
+  filter:drop-shadow(0 1px 1px rgba(58,34,67,.2));
+}
+body.theme-halloween .item-preview:active { background:#F6E0CB; }
+
+body.theme-halloween .carousel-card { background:var(--paper); }
+body.theme-halloween .carousel-card-name { color:var(--ink); }
+body.theme-halloween .carousel-card.active {
+  box-shadow:0 14px 32px rgba(43,24,49,.25);
+}
+
+body.theme-halloween footer {
+  background:#2B1C32;
+  color:#FFF8EE;
+}
+body.theme-halloween .footer-intro,
+body.theme-halloween .store-card,
+body.theme-halloween .store-card p { color:#FFF8EE; }
+body.theme-halloween .store-card {
+  background:rgba(255,255,255,.07);
+  border-color:rgba(255,248,238,.24);
+}
+body.theme-halloween .store-card:hover { background:rgba(255,255,255,.13); }
+body.theme-halloween .social-links a {
+  color:#FFF8EE;
+  background:#3A2942;
+  border-color:rgba(255,248,238,.3);
+}
+body.theme-halloween .social-links a:hover { background:#51365A; }
+
+body.theme-halloween .product-sheet { background:var(--paper); }
+body.theme-halloween .product-sheet::backdrop { background:rgba(31,19,39,.68); }
+body.theme-halloween .sheet-close { color:var(--green-deep); }
+body.theme-halloween .preview-gallery,
+body.theme-halloween .preview-slide,
+body.theme-halloween .image-viewport,
+body.theme-halloween .image-loading-status { background:var(--cream); }
+body.theme-halloween .preview-category,
+body.theme-halloween .preview-heading h2,
+body.theme-halloween .preview-price,
+body.theme-halloween .image-fallback,
+body.theme-halloween .image-loading-status { color:var(--green-deep); }
+body.theme-halloween #previewDescription,
+body.theme-halloween .preview-note { color:#65586A; }
+body.theme-halloween .preview-dots button[aria-pressed="true"]::after { background:var(--orange); }
+body.theme-halloween :where(button, a, [tabindex]):focus-visible {
+  outline-color:var(--orange);
+}
+
+@media (prefers-reduced-motion:reduce) {
+  body.theme-halloween *,
+  body.theme-halloween *::before,
+  body.theme-halloween *::after { scroll-behavior:auto; }
+}
+
+/* Seasonal Halloween ornaments */
+body.theme-halloween .halloween-web,
+body.theme-halloween .halloween-skull {
+  position:absolute;
+  z-index:1;
+  line-height:1;
+  pointer-events:none;
+  user-select:none;
+}
+body.theme-halloween .halloween-web {
+  top:12px;
+  font-size:clamp(2.4rem, 10vw, 4rem);
+  opacity:.8;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.28));
+}
+body.theme-halloween .halloween-web::before { content:"\01F578"; }
+body.theme-halloween .halloween-web-left { left:12px; }
+body.theme-halloween .halloween-web-right { right:12px; transform:scaleX(-1); }
+body.theme-halloween .halloween-skull {
+  top:58px;
+  right:max(18px, calc(50% - 150px));
+  font-size:1.7rem;
+  transform:rotate(10deg);
+}
+body.theme-halloween .halloween-skull::before { content:"\01F480"; }
+
+body.theme-halloween section.category h2::before,
+body.theme-halloween .carousel-section h2::before {
+  content:"\01F383";
+  width:auto;
+  height:auto;
+  background:none;
+  border-radius:0;
+  font-size:1.05rem;
+}
+body.theme-halloween .carousel-section h2::after {
+  content:"\01F987";
+  margin-left:auto;
+  font-size:1.2rem;
+}
+
+body.theme-halloween .carousel-dots span,
+body.theme-halloween .carousel-dots span.active {
+  display:grid;
+  place-items:center;
+  width:18px;
+  height:18px;
+  background:none;
+  transform:none;
+}
+body.theme-halloween .carousel-dots span::before {
+  content:"\01F383";
+  font-size:12px;
+  opacity:.45;
+}
+body.theme-halloween .carousel-dots span.active::before { opacity:1; transform:scale(1.25); }
+
+body.theme-halloween footer .fline {
+  position:relative;
+  width:24px;
+  height:22px;
+  margin-bottom:12px;
+  background:none;
+}
+body.theme-halloween footer .fline::before {
+  content:"\01F480";
+  position:absolute;
+  inset:0;
+  font-size:1.05rem;
+}
+
+body.theme-halloween .preview-dots button::after {
+  content:"\01F383";
+  width:auto;
+  height:auto;
+  background:none;
+  border-radius:0;
+  font-size:14px;
+  opacity:.45;
+}
+body.theme-halloween .preview-dots button[aria-pressed="true"]::after { opacity:1; }
+
+
+/* menu.js puede activar el aviso morado en octubre; esta página mantiene el tema Halloween. */
+body.theme-halloween .seasonal-ribbon { display:none !important; }
