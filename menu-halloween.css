@@ -56,6 +56,16 @@ body.theme-halloween .hamburger { background:var(--cream-2); }
 body.theme-halloween .hamburger:active { background:#F6D3AE; }
 body.theme-halloween .hamburger span { background:var(--green-deep); }
 body.theme-halloween .topbar .brand span { color:var(--green-deep); }
+body.theme-halloween .topbar .brand img.brand-logo-halloween {
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  object-fit:contain;
+  object-position:center;
+  border:0;
+  border-radius:50%;
+  box-shadow:none;
+}
 body.theme-halloween .menu-overlay { background:rgba(31,19,39,.68); }
 body.theme-halloween .menu-drawer { background:var(--paper); }
 body.theme-halloween .menu-drawer-head {
