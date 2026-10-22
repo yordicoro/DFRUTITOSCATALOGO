@@ -20,7 +20,7 @@
     background:radial-gradient(circle at 50% -10%, var(--green) 0%, var(--green-deep) 70%);
     color:var(--cream);
     text-align:center;
-    padding:36px 20px 28px;
+    padding:12px 16px 22px;
     position:relative;
     overflow:hidden;
   }
@@ -38,7 +38,7 @@
     border-radius:50%;
     border:3px solid var(--orange-light);
     box-shadow:0 6px 20px rgba(0,0,0,0.35);
-    margin-bottom:14px;
+    margin-bottom:4px;
   }
   .hero h1{
     font-family:'Fraunces', serif;
@@ -612,3 +612,66 @@ body.octubre-morado .hero{
 body.octubre-morado .hero img{border-color:#e2ba78;}
 body.octubre-morado .hero p.tag{color:#f0d49a;}
 body.octubre-morado .menu-overlay{background:rgba(49,23,55,.58);}
+
+
+/* Diseño adaptable para computadora: cabecera, recomendados y carta alineados. */
+@media (min-width:900px){
+  .topbar{
+    padding-left:max(24px, calc((100% - 1088px)/2 + 24px));
+    padding-right:max(24px, calc((100% - 1088px)/2 + 24px));
+  }
+  .carousel-section,
+  main{
+    max-width:1088px;
+  }
+  .carousel-section{
+    padding-left:24px;
+    padding-right:24px;
+  }
+  .carousel-section h2{
+    justify-content:center;
+  }
+  .carousel-track{
+    display:grid;
+    grid-template-columns:repeat(5, minmax(0, 1fr));
+    gap:14px;
+    overflow:visible;
+    padding:20px 0 28px;
+    scroll-snap-type:none;
+  }
+  .carousel-card,
+  .carousel-card.active{
+    width:auto;
+    transform:none;
+    opacity:1;
+  }
+  .carousel-card.active{
+    transform:translateY(-4px);
+  }
+  .carousel-card-info{
+    padding:9px 10px 10px;
+  }
+  .carousel-card-name{
+    font-size:.78rem;
+  }
+  .carousel-card-price{
+    font-size:.85rem;
+  }
+  .carousel-dots{
+    display:none;
+  }
+  main{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    column-gap:48px;
+    align-items:start;
+    padding-left:24px;
+    padding-right:24px;
+  }
+  section.category{
+    min-width:0;
+  }
+  .store-locations{
+    max-width:1040px;
+  }
+}
