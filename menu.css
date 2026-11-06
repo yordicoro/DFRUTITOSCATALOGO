@@ -398,6 +398,31 @@
   display:block;
   background:var(--cream-2);
 }
+.carousel-caption{
+  margin:-4px 0 6px;
+  color:var(--ink);
+  font-size:.78rem;
+  line-height:1.35;
+  opacity:.78;
+}
+.carousel-card-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:2;
+  padding:5px 8px;
+  border-radius:999px;
+  background:var(--green-deep);
+  color:var(--cream);
+  font-family:'Work Sans',sans-serif;
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  line-height:1;
+  text-transform:uppercase;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);
+}
+.carousel-card-badge.is-new{background:var(--orange);}
 .carousel-card-info{
   padding:10px 12px 12px;
 }
@@ -659,7 +684,32 @@ body.octubre-morado .menu-overlay{background:rgba(49,23,55,.58);}
   .carousel-card.active{
     transform:translateY(-4px);
   }
-  .carousel-card-info{
+  .carousel-caption{
+  margin:-4px 0 6px;
+  color:var(--ink);
+  font-size:.78rem;
+  line-height:1.35;
+  opacity:.78;
+}
+.carousel-card-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:2;
+  padding:5px 8px;
+  border-radius:999px;
+  background:var(--green-deep);
+  color:var(--cream);
+  font-family:'Work Sans',sans-serif;
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  line-height:1;
+  text-transform:uppercase;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);
+}
+.carousel-card-badge.is-new{background:var(--orange);}
+.carousel-card-info{
     padding:9px 10px 10px;
   }
   .carousel-card-name{
