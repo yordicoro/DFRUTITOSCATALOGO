@@ -32,19 +32,34 @@
   const highlightCount = document.getElementById('highlightCount');
   const highlightProgress = document.getElementById('highlightProgress');
   const highlightThumbnails = document.getElementById('highlightThumbnails');
-  const featuredAlbums = [{
+  const featuredAlbums = [
+  {
     title: 'Novedades',
+    cover: 'img/postres/crema_volteada.png',
+    photos: [
+      {src: 'img/postres/crema_volteada.png', caption: 'Crema volteada · S/ 10.00'},
+      {src: 'img/jugos_clasicos/maracuya.png', caption: 'Maracuyá · S/ 10.00'}
+    ]
+  },
+  {
+    title: 'Dulces y bebidas',
     cover: 'img/rollos/rollito_pecanas.png',
     photos: [
-      {src: 'img/rollos/rollito_pecanas.png', caption: 'Rollo con pecanas'},
-      {src: 'img/cafe/capuccino_chantilly.png', caption: 'Capuccino con chantilly'},
-      {src: 'img/cafe/chocolate_leche.png', caption: 'Chocolate con leche'},
-      {src: 'img/sandwich/sandwich_mixto.png', caption: 'Sándwich Mixto'},
-      {src: 'img/hamburguesas/hamburguesa_finolis.png', caption: 'Hamburguesa Finolis'},
-      {src: 'img/empanadas/empanada_jamon_queso.png', caption: 'Empanada de jamón con queso'}
-      
+      {src: 'img/rollos/rollito_pecanas.png', caption: 'Rollo con pecanas · S/ 10.00'},
+      {src: 'img/cafe/capuccino_chantilly.png', caption: 'Capuchino con chantilly · S/ 10.00'},
+      {src: 'img/cafe/chocolate_leche.png', caption: 'Chocolate con leche · S/ 11.00'}
     ]
-  }];
+  },
+  {
+    title: 'Salados',
+    cover: 'img/sandwich/sandwich_mixto.png',
+    photos: [
+      {src: 'img/sandwich/sandwich_mixto.png', caption: 'Sándwich mixto · S/ 11.00'},
+      {src: 'img/hamburguesas/hamburguesa_finolis.png', caption: 'Hamburguesa Finolis · S/ 15.00'},
+      {src: 'img/empanadas/empanada_jamon_queso.png', caption: 'Empanada jamón con queso · S/ 6.00'}
+    ]
+  }
+];
   let activeHighlightAlbum = 0;
   let activeHighlightPhoto = 0;
   let highlightTouchStartX = null;
