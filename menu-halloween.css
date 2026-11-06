@@ -56,6 +56,14 @@ body.theme-halloween .hamburger { background:var(--cream-2); }
 body.theme-halloween .hamburger:active { background:#F6D3AE; }
 body.theme-halloween .hamburger span { background:var(--green-deep); }
 body.theme-halloween .topbar .brand span { color:var(--green-deep); }
+body.theme-halloween .topbar .brand .highlights-launcher img.brand-logo-halloween {
+  width:100%;
+  height:100%;
+  flex:initial;
+  padding:5px;
+  border:2px solid var(--paper);
+  background:var(--paper);
+}
 body.theme-halloween .topbar .brand img.brand-logo-halloween {
   width:48px;
   height:48px;

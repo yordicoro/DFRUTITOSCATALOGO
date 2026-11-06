@@ -29,7 +29,7 @@
 
 <div class="topbar">
   <div class="brand">
-        <img class="brand-logo-halloween" src="logo_halloween.png" alt="Estación Frutal">
+        <button class="highlights-launcher" id="openHighlights" type="button" aria-label="Abrir historias destacadas de Estación Frutal" aria-haspopup="dialog" aria-controls="highlightsDialog" aria-expanded="false" title="Historias destacadas"><img class="brand-logo-halloween" src="logo_halloween.png" alt=""></button>
     <span>Estación Frutal</span>
   </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú de categorías" aria-expanded="false" aria-controls="menuDrawer">
@@ -759,6 +759,32 @@
   </nav>
 </footer>
 
+<dialog class="highlights-dialog" id="highlightsDialog" aria-labelledby="highlightsTitle">
+  <div class="highlights-shell">
+    <header class="highlights-header">
+      <div>
+        <p class="highlights-kicker">PRODUCTOS DESTACADOS</p>
+        <h2 id="highlightsTitle">Estación Frutal</h2>
+      </div>
+      <button class="highlights-close" id="closeHighlights" type="button" aria-label="Cerrar historias destacadas" autofocus>&times;</button>
+    </header>
+    <div class="highlights-albums" id="highlightsAlbums" role="group" aria-label="Álbumes destacados"></div>
+    <section class="highlight-story" aria-label="Fotos destacadas">
+      <div class="highlight-progress" id="highlightProgress" aria-hidden="true"></div>
+      <div class="highlight-stage" id="highlightStage" role="region" aria-label="Historia destacada" aria-live="polite">
+        <button class="highlight-nav highlight-previous" id="highlightPrevious" type="button" aria-label="Foto anterior">&#8249;</button>
+        <img id="highlightImage" alt="" decoding="async">
+        <button class="highlight-nav highlight-next" id="highlightNext" type="button" aria-label="Foto siguiente">&#8250;</button>
+      </div>
+      <div class="highlight-caption-row">
+        <p id="highlightCaption"></p>
+        <span id="highlightCount" aria-live="polite"></span>
+      </div>
+      <div class="highlight-thumbnails" id="highlightThumbnails" role="group" aria-label="Elegir foto destacada"></div>
+    </section>
+    <p class="highlight-help">Desliza las fotos o usa las flechas para recorrerlas.</p>
+  </div>
+</dialog>
 <dialog class="product-sheet" id="productSheet" aria-labelledby="previewName" aria-describedby="previewDescription previewNote">
   <div class="sheet-handle" aria-hidden="true"></div>
   <button class="sheet-close" type="button" aria-label="Cerrar vista del producto" autofocus>&times;</button>
