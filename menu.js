@@ -35,8 +35,11 @@
   const featuredAlbums = [
   {
     title: 'Novedades',
-    cover: 'img/postres/crema_volteada.png',
+    cover: 'img/frappes/frappe_oreo.png',
     photos: [
+      {src: 'img/frappes/frappe_oreo.png', caption: 'Frappe Oreo · S/ 13.00'},
+      {src: 'img/frappes/frappe_caramelo.png', caption: 'Frappe caramelo · S/ 13.00'},
+      {src: 'img/frappes/frappe_moka.png', caption: 'Frappe moka · S/ 13.00'},
       {src: 'img/postres/crema_volteada.png', caption: 'Crema volteada · S/ 10.00'},
       {src: 'img/jugos_clasicos/maracuya.png', caption: 'Maracuyá · S/ 10.00'}
     ]
