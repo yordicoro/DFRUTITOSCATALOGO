@@ -33,7 +33,7 @@
   const highlightProgress = document.getElementById('highlightProgress');
   const highlightThumbnails = document.getElementById('highlightThumbnails');
   const featuredAlbums = [{
-    title: 'Productos',
+    title: 'Novedades',
     cover: 'img/rollos/rollito_pecanas.png',
     photos: [
       {src: 'img/rollos/rollito_pecanas.png', caption: 'Rollo con pecanas'},
