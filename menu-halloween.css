@@ -152,6 +152,7 @@ body.theme-halloween .image-loading-status { color:var(--green-deep); }
 body.theme-halloween #previewDescription,
 body.theme-halloween .preview-note { color:#65586A; }
 body.theme-halloween .preview-dots button[aria-pressed="true"]::after { background:var(--orange); }
+body.theme-halloween .preview-image-caption { background:rgba(45,25,52,.95); color:#FFE9C9; border:1px solid rgba(230,122,40,.85); }
 body.theme-halloween :where(button, a, [tabindex]):focus-visible {
   outline-color:var(--orange);
 }

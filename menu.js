@@ -287,6 +287,7 @@
   }
 
   const imagePaths = item => (item.dataset.images || '').split(',').map(path => path.trim()).filter(Boolean).slice(0, 2);
+  const imageDescriptions = item => (item.dataset.imageDescriptions || '').split('|').map(description => description.trim()).slice(0, 2);
   const camera = '<svg class="photo-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7h4l2-3h6l2 3h4v13H3z"/><circle cx="12" cy="13" r="4"/></svg>';
   document.querySelectorAll('.item-preview').forEach(item => {
     if (!imagePaths(item).length) {
@@ -460,6 +461,7 @@
 
   function openPreview(item, source = item) {
     const paths = imagePaths(item);
+    const descriptions = imageDescriptions(item);
     if (!paths.length || sheet.open || closing) return;
     closeDrawer(false);
     opener = source;
@@ -480,7 +482,10 @@
       const slide = document.createElement('div');
       slide.className = 'preview-slide';
       slide.setAttribute('role', 'group');
-      slide.setAttribute('aria-label', `Imagen ${index + 1} de ${paths.length}`);
+      const imageDescription = descriptions[index] || '';
+      slide.setAttribute('aria-label', imageDescription
+        ? `Imagen ${index + 1} de ${paths.length}: ${imageDescription}`
+        : `Imagen ${index + 1} de ${paths.length}`);
       const image = document.createElement('img');
       image.width = 900;
       image.height = 900;
@@ -496,6 +501,12 @@
       }, {once: true});
       configureImageZoom(slide, image);
       configureImageLoading(slide, image);
+      if (imageDescription) {
+        const caption = document.createElement('span');
+        caption.className = 'preview-image-caption';
+        caption.textContent = imageDescription;
+        slide.appendChild(caption);
+      }
       image.src = path;
       gallery.appendChild(slide);
       if (paths.length > 1) {
