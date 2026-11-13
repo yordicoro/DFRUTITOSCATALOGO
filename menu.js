@@ -317,14 +317,14 @@
     viewport.className = 'image-viewport';
     viewport.tabIndex = 0;
     viewport.setAttribute('role', 'group');
-    viewport.setAttribute('aria-label', 'Imagen: separa dos dedos para ampliar y arrastra para explorar. Con teclado, Enter amplía o reduce y las flechas desplazan.');
+    viewport.setAttribute('aria-label', 'Imagen: desliza para cambiar de fotografía. Pellizca para ampliar y arrastra para explorarla. Con teclado, Enter amplía o reduce y las flechas desplazan.');
     const surface = document.createElement('div');
     surface.className = 'image-surface';
     surface.appendChild(image);
     viewport.appendChild(surface);
     slide.appendChild(viewport);
     image.draggable = false;
-    let scale = 1, pinch = null, moved = false, axis = null;
+    let scale = 1, pinch = null, moved = false;
     const pointers = new Map();
     function reset() {
       scale = 1;
@@ -363,7 +363,7 @@
     }
     viewport.addEventListener('pointerdown', event => {
       if (event.button !== 0) return;
-      if (!pointers.size) { moved = false; axis = null; }
+      if (!pointers.size) moved = false;
       pointers.set(event.pointerId, {x:event.clientX,y:event.clientY,startX:event.clientX,startY:event.clientY});
       viewport.setPointerCapture(event.pointerId);
       if (pointers.size === 2) { pinch = {...pair(), scale}; moved = true; }
@@ -385,10 +385,6 @@
         viewport.scrollLeft -= dx;
         viewport.scrollTop -= dy;
         viewport.classList.add('is-dragging');
-      } else if (event.pointerType !== 'mouse') {
-        axis ||= Math.abs(totalX)>Math.abs(totalY) ? 'x' : 'y';
-        if (axis==='x') { gallery.classList.add('is-swiping'); gallery.scrollLeft -= dx; }
-        else sheet.scrollTop -= dy;
       }
     });
     function finishPointer(event) {
@@ -398,11 +394,6 @@
       if (pointers.size<2) pinch=null;
       if (!pointers.size) {
         viewport.classList.remove('is-dragging');
-        if (gallery.classList.contains('is-swiping')) {
-          const page = Math.round(gallery.scrollLeft/gallery.clientWidth);
-          gallery.classList.remove('is-swiping');
-          gallery.scrollTo({left:page*gallery.clientWidth,behavior:reducedMotion.matches?'instant':'smooth'});
-        }
         // Mouse retains click-to-zoom; touch uses only the two-finger gesture.
         if (!moved && event.pointerType==='mouse' && event.type==='pointerup') setZoom(scale>1?1:2.5);
       }
@@ -417,10 +408,16 @@
   }
   new ResizeObserver(() => resetZoom()).observe(gallery);
 
+  let activeImageDescriptions = [];
+  let activeProductDescription = '';
   function selectDot(index) {
     [...dots.children].forEach((dot, i) => {
       dot.setAttribute('aria-pressed', String(i === index));
     });
+    const description = document.getElementById('previewDescription');
+    const text = activeImageDescriptions[index] || activeProductDescription;
+    description.textContent = text;
+    description.hidden = !text;
   }
   const pendingImageLoads = new Set();
   function clearImageLoading() {
@@ -461,7 +458,8 @@
 
   function openPreview(item, source = item) {
     const paths = imagePaths(item);
-    const descriptions = imageDescriptions(item);
+    activeProductDescription = item.dataset.description || item.querySelector('.item-desc')?.textContent || '';
+    activeImageDescriptions = imageDescriptions(item);
     if (!paths.length || sheet.open || closing) return;
     closeDrawer(false);
     opener = source;
@@ -469,9 +467,7 @@
     document.getElementById('previewName').textContent = name;
     document.getElementById('previewPrice').textContent = `S/ ${item.querySelector('.item-price').textContent.trim()}`;
     document.getElementById('previewCategory').textContent = item.closest('.category').querySelector('h2').textContent;
-    const description = document.getElementById('previewDescription');
-    description.textContent = item.dataset.description || item.querySelector('.item-desc')?.textContent || '';
-    description.hidden = !description.textContent;
+
     resetZoom();
     clearImageLoading();
     zoomControllers.clear();
@@ -482,10 +478,7 @@
       const slide = document.createElement('div');
       slide.className = 'preview-slide';
       slide.setAttribute('role', 'group');
-      const imageDescription = descriptions[index] || '';
-      slide.setAttribute('aria-label', imageDescription
-        ? `Imagen ${index + 1} de ${paths.length}: ${imageDescription}`
-        : `Imagen ${index + 1} de ${paths.length}`);
+      slide.setAttribute('aria-label', `Imagen ${index + 1} de ${paths.length}`);
       const image = document.createElement('img');
       image.width = 900;
       image.height = 900;
@@ -501,12 +494,6 @@
       }, {once: true});
       configureImageZoom(slide, image);
       configureImageLoading(slide, image);
-      if (imageDescription) {
-        const caption = document.createElement('span');
-        caption.className = 'preview-image-caption';
-        caption.textContent = imageDescription;
-        slide.appendChild(caption);
-      }
       image.src = path;
       gallery.appendChild(slide);
       if (paths.length > 1) {

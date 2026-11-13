@@ -535,7 +535,6 @@ section.category{scroll-margin-top:calc(80px + env(safe-area-inset-top));}
 .preview-slide{flex:0 0 100%; min-width:0; scroll-snap-align:center; scroll-snap-stop:always; aspect-ratio:1/1; max-height:48dvh; background:var(--cream); display:grid; place-items:center;}
 .preview-slide img{display:block; width:100%; height:100%; min-height:0; object-fit:cover;}
 .preview-slide img[hidden]{display:none;}
-.preview-image-caption{position:absolute; z-index:2; inset-inline:12px; bottom:12px; width:fit-content; max-width:calc(100% - 24px); padding:7px 11px; border-radius:999px; background:rgba(11,65,45,.94); color:#fff; box-shadow:0 2px 10px rgba(0,0,0,.2); font-size:.78rem; line-height:1.25; font-weight:600; pointer-events:none;}
 .image-fallback{padding:40px; color:var(--green); text-align:center; line-height:1.6;}
 .preview-dots{display:flex; justify-content:center; padding:0;}
 .preview-dots[hidden]{display:none;}
@@ -564,9 +563,9 @@ section.category{scroll-margin-top:calc(80px + env(safe-area-inset-top));}
 
 /* Responsive image viewport with scrollable zoom in both directions. */
 .preview-slide{position:relative; display:block; aspect-ratio:auto; height:min(100vw, 48vh, 560px); height:min(100vw, 48dvh, 560px); overflow:hidden;}
-.image-viewport{width:100%; height:100%; touch-action:none; overflow:hidden; background:var(--cream);}
+.image-viewport{width:min(100vw, 48dvh, 560px); height:100%; margin-inline:auto; touch-action:pan-x pan-y; overflow:hidden; background:var(--cream);}
 .image-surface{width:100%; height:100%; display:grid; place-items:center;}
-.preview-slide .image-surface img{width:100%; height:100%; max-width:none; object-fit:cover; cursor:zoom-in; user-select:none; -webkit-user-drag:none;}
+.preview-slide .image-surface img{width:100%; height:100%; max-width:none; object-fit:contain; cursor:zoom-in; user-select:none; -webkit-user-drag:none;}
 .image-viewport.is-zoomed{overflow:auto; overscroll-behavior:contain; touch-action:none;}
 .image-viewport.is-zoomed img{cursor:grab;}
 .image-viewport.is-dragging img{cursor:grabbing;}
@@ -588,7 +587,6 @@ footer{opacity:1;}
 .social-links a:active{background:var(--cream-2);}
 
 .image-viewport[hidden]{display:none;}
-.preview-gallery.is-swiping{scroll-snap-type:none;}
 .image-viewport:focus-visible{outline:3px solid var(--green); outline-offset:-3px;}
 
 /* Show feedback only for images that take longer than 200 ms. */
